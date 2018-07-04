@@ -149,7 +149,7 @@ app.use(require("morgan")('short', {
 }));
 
 app.use('/', routes);
-app.use('/users', users(express, logger, app.config));
+app.use('/saltieList', users(express, logger, app.config));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

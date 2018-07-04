@@ -8,17 +8,26 @@ module.exports = function (express, logger, config) {
 	    usersController = require(path.join('..', 'controllers', 'usersController'))(logger, config);
 
 	/* GET users listing. */
-	router.get('/', function (req, res) {
-		usersController.getUsers(function (err, usersList) {
-			if (err) {
-				res.status(err.status).json({
-					message: err.message
-				});
-			} else {
-				res.status(200).json(usersList);
-			}
+	router.post('/', function (req, res) {
+		console.log(req);
+		if(req.body){
+			logger.info('Requesting Saltie list', req.body);
+			usersController.getUsers(function (err, saltieList) {
+				if (err) {
+					res.status(err.status).json({
+						message: err.message
+					});
+				} else {
+					res.status(200).json(saltieList);
+				}
+	
+			});
+		}else{
+			res.status(400).json({
+				message: "Request Body Empty"
+			});
+		}
 
-		});
 	});
 	
 	return router;
