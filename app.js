@@ -5,6 +5,8 @@
 var express = require('express');
 var path = require('path');
 var winston = require('winston');
+require('winston-logstash');
+
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var fs = require('fs');
@@ -119,14 +121,14 @@ if (logLevel === 'debug') {
 	}));
 	// winstonTransports.push(new Elasticsearch(esTransportOpts));
 
-	// winstonTransports.push(new (winston.transports.Logstash)({
-	// 	port: 28777,
-	// 	node_name: 'snapJob',
-	// 	localhost: 'localhost',
-	// 	pid: 12345 ,
-	// 	ssl_enable: false,
-	// 	ca: undefined
-	// }))
+	winstonTransports.push(new (winston.transports.Logstash)({
+		port: 28777,
+		node_name: 'snapJob',
+		localhost: 'localhost',
+		pid: 12345 ,
+		ssl_enable: false,
+		ca: undefined
+	}))
 }
 
 var logger = new winston.Logger({

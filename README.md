@@ -50,7 +50,47 @@ filter {
 }
 ```
 Run Logstash : `bin/logstash -f logstash-simple.conf`
+#### Configuration for Direct Logging from Logstash to Elasticsearch
+##### Node
 
+``` js
+  var winston = require('winston');
+
+  //
+  // Requiring `winston-logstash` will expose
+  // `winston.transports.Logstash`
+  //
+  require('winston-logstash');
+
+winstonTransports.push(new (winston.transports.Logstash)({
+		port: 28777,
+		node_name: 'snapJob',
+		localhost: 'localhost',
+		pid: 12345 ,
+		ssl_enable: false,
+		ca: undefined
+	}))
+```
+
+##### Logstash config
+
+``` ruby
+input {
+ tcp { port => 28777 type=>"log" }
+}
+output {
+  elasticsearch {
+    hosts => ["localhost:9200"]
+    index => "logstashtcp"
+  }
+  stdout { codec => rubydebug }
+}
+filter {
+ json {
+  source => "message"
+ }
+}
+```
 ### Install Filebeat
 Install From `https://www.elastic.co/downloads/beats/filebeat`
 

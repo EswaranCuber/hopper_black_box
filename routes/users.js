@@ -9,7 +9,6 @@ module.exports = function (express, logger, config) {
 
 	/* GET users listing. */
 	router.post('/', function (req, res) {
-		console.log(req);
 		if(req.body){
 			logger.info('Requesting Saltie list', req.body);
 			usersController.getUsers(function (err, saltieList) {
